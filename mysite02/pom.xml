@@ -99,7 +99,7 @@
 					<url>http://192.168.1.118/manager/text</url>
 					<path>/mysite02</path>
 					<username>admin</username>
-					<password>manager</password>
+					<password>admin</password>
 				</configuration>
 			</plugin>
 
