@@ -66,10 +66,10 @@ public class BoardController {
 		}
 		vo.setMember_no(authUser.getNo());
 		if(service.addBoard(vo) == false) {
-			return "user/write";
-		}else {
-			return "redirect:/board?page=1";
+			return "board/write";
 		}
+		
+		return "redirect:/board?page=1";
 	}
 	
 	// Board 수정 form
@@ -89,7 +89,7 @@ public class BoardController {
 			return "redirect:/";
 		}
 		model.addAttribute("boardVo", boardVo);
-		return "user/write";
+		return "board/write";
 	}
 	
 	// Board 수정 실행
@@ -98,13 +98,13 @@ public class BoardController {
 	public String modify(HttpSession session, BoardVO vo) {
 		UserVO authUser = (UserVO) session.getAttribute("authUser");
 		if (authUser == null) {
-			return "redirect:/";
+			return "user/login";
 		}
 		
 		if(service.modifyBoard(vo, authUser) == false) {
-			return "user/login";
+			return "redirect:/";
 		}
-		return "redirect:/board?page=1";
+		return "redirect:/board/view/" + vo.getNo();
 	}
 	
 	// reply 페이지 form으로 연결
@@ -112,6 +112,10 @@ public class BoardController {
 	public String reply(HttpSession session, @PathVariable("no") Long no, Model model) {
 		if(no == null) {
 			return "redirect:/";
+		}
+		UserVO authUser = (UserVO) session.getAttribute("authUser");
+		if (authUser == null) {
+			return "user/login";
 		}
 		
 		BoardVO targetVo = service.find(no);

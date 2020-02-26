@@ -62,15 +62,16 @@ public class BoardRepository {
 	
 	/*********************************************** 답글 추가 *************************************************/
 	// 1. 같은 그룹(g_no)의 번호를 한칸씩 뒤로 미루기
+	// 이 때에 적용 대상이 0인 경우도 있으니 참고하기!
 	// [대상의 g_no, 대상의 o_no] >>> [true/false]
 	public Boolean updategroup(BoardVO inputVo) {
-		return sqlSession.update("board.updategroup", inputVo) == 1;
+		return sqlSession.update("board.updategroup", inputVo) >= 0;
 	}
 
 	// 2. 댓글을 삽입하기
 	// [title, contents, member_no, 대상의 no] -> [true/false]
 	public Boolean addreply(BoardVO inputVo) {
-		return sqlSession.insert("board.addreply", inputVo) == 1;
+		return sqlSession.insert("board.addreply", inputVo) >= 1;
 	}
 
 	/***********************************************************************************************/

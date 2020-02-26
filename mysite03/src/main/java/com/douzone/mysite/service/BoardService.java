@@ -101,10 +101,13 @@ public class BoardService {
 	// 기존의 vo(대상의 no, 대상의 g_no, 대상의 o_no, depth, title, contents) + member_no (authUser.no)
 	public Boolean addReply(BoardVO inputVo, Long authUserNo){
 		inputVo.setMember_no(authUserNo);
+		System.out.println(inputVo.toString());
 		if(repository.updategroup(inputVo) == false) {
+			System.out.println("[ERROR] - updategroup");
 			return false;
 		}
 		if(repository.addreply(inputVo) == false) {
+			System.out.println("[ERROR] - addreply");
 			return false;
 		}
 		return true;

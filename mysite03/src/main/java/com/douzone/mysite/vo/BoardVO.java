@@ -101,4 +101,11 @@ public class BoardVO {
 		this.counted = counted;
 	}
 
+	@Override
+	public String toString() {
+		return "BoardVO [no=" + no + ", title=" + title + ", contents=" + contents + ", hit=" + hit + ", reg_date="
+				+ reg_date + ", g_no=" + g_no + ", o_no=" + o_no + ", depth=" + depth + ", member_no=" + member_no
+				+ ", member_name=" + member_name + ", counted=" + counted + "]";
+	}
+
 }
