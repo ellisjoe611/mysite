@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="user">
+
+	<!-- 회원가입 ( [name, email, pw, gender] >>> [true/false] ) -->
+	<insert id="insert" parameterType="UserVO">
+		<![CDATA[
+			insert into user values(null, #{name}, #{email}, password(#{pw}), #{gender}, now())
+		]]>
+		<selectKey keyProperty="no" resultType="long" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+
+	<!-- 사용자 정보 업데이트 ( [name, pw??, gender, no] >>> [true/false] ) -->
+	<update id="update" parameterType="UserVO">
+		<choose>
+			<when test='pw == ""'>
+				<![CDATA[
+					update user set name = #{name}, gender = #{gender} where no = #{no}
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+					update user set name = #{name}, pw = password(#{pw}), gender = #{gender} where no = #{no}
+				]]>
+			</otherwise>
+		</choose>
+	</update>
+
+	<!-- 로그인용 ( [email, pw] >>> [no, name] ) -->
+	<select id="findUser" parameterType="UserVO" resultType="UserVO">
+		<![CDATA[
+			select no, name from user where email = #{email} and pw = password(#{pw})
+		]]>
+	</select>
+
+	<!-- 사용자 정보 수집용 ( [no] >>> [name, email, gender] ) -->
+	<select id="findUserInfo" parameterType="UserVO" resultType="UserVO">
+		<![CDATA[
+			select name, email, gender from user where no = #{no}
+		]]>
+	</select>
+
+
+</mapper>

@@ -7,7 +7,7 @@
 		<artifactId>mysite</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>mysite02</artifactId>
+	<artifactId>mysite03</artifactId>
 	<packaging>war</packaging>
 
 
@@ -15,6 +15,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<org.springframework-version>4.3.2.RELEASE</org.springframework-version>
 	</properties>
 
 
@@ -34,6 +35,53 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- Spring Core, Context, AOP -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
+		<!-- Spring Web -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
+		<!-- Spring Web MVC -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
+		<!-- spring jdbc -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
+		<!-- Common DBCP -->
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+		
+		<!-- MyBatis -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+
 		<!-- JSTL -->
 		<dependency>
 			<groupId>jstl</groupId>
@@ -50,9 +98,9 @@
 
 	</dependencies>
 
-
+	<!-- 빌드 설정 -->
 	<build>
-		<finalName>mysite02</finalName>
+		<finalName>mysite03</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<resources>
 			<resource>
@@ -97,7 +145,7 @@
 				<artifactId>tomcat-maven-plugin</artifactId>
 				<configuration>
 					<url>http://192.168.1.118:8080/manager/text</url>
-					<path>/mysite02</path>
+					<path>/mysite03</path>
 					<username>admin</username>
 					<password>admin</password>
 				</configuration>
@@ -105,12 +153,6 @@
 
 		</plugins>
 	</build>
-
-
-	<!-- 빌드명으로 빌드 시에 어떻게 동작하는지 정의하기 -->
-	<!-- 리눅스 | mvn clean package -P 프로파일ID -->
-	<profiles>
-	</profiles>
 
 
 </project>

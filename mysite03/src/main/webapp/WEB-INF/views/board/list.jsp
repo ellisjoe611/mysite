@@ -18,8 +18,7 @@
 
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="${pageContext.request.contextPath }/board" method="post">
-					<input type="hidden" name="a" value="searchtitle">
+				<form id="search_form" action="${pageContext.request.contextPath }/board?page=1" method="get">
 					<c:if test="${empty kwd }">
 						<input type="text" id="kwd" name="kwd" value="">
 					</c:if>
@@ -52,14 +51,14 @@
 										<c:if test="${vo.depth > 0 }">
 											<img src='${pageContext.request.contextPath }/assets/images/reply.png'>
 										</c:if>
-										<a href="${pageContext.request.contextPath }/board?a=viewform&formno=${vo.no }">${vo.title }</a>
+										<a href="${pageContext.request.contextPath }/board/view/${vo.no }">${vo.title }</a>
 									</td>
 									<td>${vo.member_name }</td>
 									<td>${vo.hit }</td>
 									<td>${vo.reg_date }</td>
 									<td>
 									<c:if test="${not empty authUser && authUser.no == vo.member_no}">
-										<a href="${pageContext.request.contextPath }/board?a=delete&page=${param.page }&formno=${vo.no }" class="del">삭제</a>
+										<a href="${pageContext.request.contextPath }/board/delete/${vo.no }" class="del">삭제</a>
 									</c:if>
 									</td>
 								</tr>
@@ -74,7 +73,7 @@
 									<li><a href="${pageContext.request.contextPath }/board?page=${begin-1 }">◀</a></li>
 								</c:if>
 								<c:if test="${param.page >= 6 && not empty kwd }">
-									<li><a href="${pageContext.request.contextPath }/board?a=searchtitle&page=${begin-1 }&kwd=${kwd }">◀</a></li>
+									<li><a href="${pageContext.request.contextPath }/board?page=${begin-1 }&kwd=${kwd }">◀</a></li>
 								</c:if>
 
 								<c:forEach begin='${begin }' end='${end }' var='i' step='1'>
@@ -87,7 +86,7 @@
 										<li><a href="${pageContext.request.contextPath }/board?page=${i }">${i }</a></li>
 									</c:if>
 									<c:if test="${i != param.page && not empty kwd}">
-										<li><a href="${pageContext.request.contextPath }/board?a=searchtitle&page=${i }&kwd=${kwd }">${i }</a></li>
+										<li><a href="${pageContext.request.contextPath }/board?page=${i }&kwd=${kwd }">${i }</a></li>
 									</c:if>
 
 								</c:forEach>
@@ -96,7 +95,7 @@
 									<li><a href="${pageContext.request.contextPath }/board?page=${end+1 }">▶</a></li>
 								</c:if>
 								<c:if test="${endArrowOpened eq true && not empty kwd}">
-									<li><a href="${pageContext.request.contextPath }/board?a=searchtitle&page=${end+1 }&kwd=${kwd }">▶</a></li>
+									<li><a href="${pageContext.request.contextPath }/board?page=${end+1 }&kwd=${kwd }">▶</a></li>
 								</c:if>
 							</ul>
 						</div>
@@ -106,7 +105,7 @@
 				</c:choose>
 
 				<div class="bottom">
-					<a href="${pageContext.request.contextPath }/board?a=insertform" id="new-book">글쓰기</a>
+					<a href="${pageContext.request.contextPath }/board/add" id="new-book">글쓰기</a>
 				</div>
 			</div>
 		</div>
