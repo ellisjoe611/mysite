@@ -27,10 +27,12 @@ public class BoardService {
 		
 		Map<String, Object> searchMap = new HashMap<>();
 		searchMap.put("startFrom", (page - 1) * 5);
+		searchMap.put("page", page);
 		searchMap.put("kwd", kwd);
 
 		List<BoardVO> boardList = repository.findall(searchMap);
 		model.addAttribute("boardList", boardList);
+		model.addAttribute("page", page);
 		model.addAttribute("kwd", kwd);
 		if(boardList == null || boardList.size() <= 0) {
 			return model;

@@ -46,7 +46,7 @@
 
 							<c:forEach items='${boardList }' var='vo' varStatus='status'>
 								<tr>
-									<td>${status.count + (param.page - 1) * 5 }</td>
+									<td>${status.count + (page - 1) * 5 }</td>
 									<td style="text-align:left; padding-left:${15*vo.depth }px">
 										<c:if test="${vo.depth > 0 }">
 											<img src='${pageContext.request.contextPath }/assets/images/reply.png'>
@@ -69,23 +69,23 @@
 						<!-- pager 추가 -->
 						<div class="pager">
 							<ul>
-								<c:if test="${param.page >= 6 && empty kwd }">
+								<c:if test="${page >= 6 && empty kwd }">
 									<li><a href="${pageContext.request.contextPath }/board?page=${begin-1 }">◀</a></li>
 								</c:if>
-								<c:if test="${param.page >= 6 && not empty kwd }">
+								<c:if test="${page >= 6 && not empty kwd }">
 									<li><a href="${pageContext.request.contextPath }/board?page=${begin-1 }&kwd=${kwd }">◀</a></li>
 								</c:if>
 
 								<c:forEach begin='${begin }' end='${end }' var='i' step='1'>
 
 									<!-- page가 i랑 같으면 선택된 걸로 처리 -->
-									<c:if test="${i == param.page}">
+									<c:if test="${i == page}">
 										<li class="selected">${i }</li>
 									</c:if>
-									<c:if test="${i != param.page && empty kwd }">
+									<c:if test="${i != page && empty kwd }">
 										<li><a href="${pageContext.request.contextPath }/board?page=${i }">${i }</a></li>
 									</c:if>
-									<c:if test="${i != param.page && not empty kwd}">
+									<c:if test="${i != page && not empty kwd}">
 										<li><a href="${pageContext.request.contextPath }/board?page=${i }&kwd=${kwd }">${i }</a></li>
 									</c:if>
 
