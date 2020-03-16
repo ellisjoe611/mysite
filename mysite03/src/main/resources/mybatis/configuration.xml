@@ -2,11 +2,13 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
+		<typeAlias alias="MainVO" type="com.douzone.mysite.vo.MainVO"/>
 		<typeAlias alias="UserVO" type="com.douzone.mysite.vo.UserVO"/>
 		<typeAlias alias="GuestbookVO" type="com.douzone.mysite.vo.GuestbookVO"/>
 		<typeAlias alias="BoardVO" type="com.douzone.mysite.vo.BoardVO"/>
 	</typeAliases>
 	<mappers>
+		<mapper resource="mybatis/mappers/main.xml" />
 		<mapper resource="mybatis/mappers/user.xml" />
 		<mapper resource="mybatis/mappers/guestbook.xml" />
 		<mapper resource="mybatis/mappers/board.xml" />

@@ -80,6 +80,9 @@ public class UserController {
 //		if (session == null || authUser == null) {
 //			return "redirect:/user/login";
 //		}
+		if(updatedVo.getName() != null && "".equals(updatedVo.getName()) != true) {
+			authUser.setName(updatedVo.getName());
+		}
 		updatedVo.setNo(authUser.getNo());
 		
 		if (userService.update(updatedVo) == false) {

@@ -13,37 +13,37 @@
 	<!-- validator, conversionService, messageConverter를 자동으로 등록 -->
 	<mvc:annotation-driven>
 		<mvc:argument-resolvers>
-			<bean class="com.douzone.security.AuthUserHandlerMethodArgumentResolver"/>
+			<bean class="com.douzone.security.AuthUserHandlerMethodArgumentResolver" />
 		</mvc:argument-resolvers>
 	</mvc:annotation-driven>
 
 	<!-- 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->
 	<mvc:default-servlet-handler />
-	
+
 	<!-- Interceptors -->
 	<mvc:interceptors>
 		<mvc:interceptor>
-			<mvc:mapping path="/**"/>
-			<mvc:exclude-mapping path="/user/auth"/>
-			<mvc:exclude-mapping path="/user/logout"/>
-			<mvc:exclude-mapping path="/admin/**"/>
-			<mvc:exclude-mapping path="/assets/**"/>
-			<bean class="com.douzone.security.AuthInterceptor"/>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/user/auth" />
+			<mvc:exclude-mapping path="/user/logout" />
+			<mvc:exclude-mapping path="/admin/**" />
+			<mvc:exclude-mapping path="/assets/**" />
+			<bean class="com.douzone.security.AuthInterceptor" />
 		</mvc:interceptor>
-		
+
 		<mvc:interceptor>
-			<mvc:mapping path="/user/auth"/>
-			<bean class="com.douzone.security.LoginInterceptor"/>
+			<mvc:mapping path="/user/auth" />
+			<bean class="com.douzone.security.LoginInterceptor" />
 		</mvc:interceptor>
-		
+
 		<mvc:interceptor>
-			<mvc:mapping path="/user/logout"/>
-			<bean class="com.douzone.security.LogoutInterceptor"/>
+			<mvc:mapping path="/user/logout" />
+			<bean class="com.douzone.security.LogoutInterceptor" />
 		</mvc:interceptor>
-		
+
 		<mvc:interceptor>
-			<mvc:mapping path="/admin"/>
-			<bean class="com.douzone.security.AdminInterceptor"/>
+			<mvc:mapping path="/admin" />
+			<bean class="com.douzone.security.AdminInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
 
@@ -56,5 +56,22 @@
 		<property name="prefix" value="/WEB-INF/views/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
+
+	<!-- Multipart Resolver -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 최대업로드 가능한 바이트크기 -->
+		<property name="maxUploadSize" value="52428800" />
+		
+		<!-- 디스크에 임시 파일을 생성하기 전에 메모리에 보관할수 있는 최대 바이트 크기 -->
+		<!-- 값이 클수록 업로드 속도가 빨라지는 대신 서버 상의 메모리 소모가 커지므로 효율성을 고려하여 설정하도록 한다 -->
+		<!-- property name="maxInMemorySize" value="52428800" / -->
+		
+		<!-- defaultEncoding -->
+		<property name="defaultEncoding" value="utf-8" />
+	</bean>
+	
+	<!-- Image Source Address -->
+	<mvc:resources mapping="/images/**" location="file:/mysite-uploads" />
+	
 
 </beans>
