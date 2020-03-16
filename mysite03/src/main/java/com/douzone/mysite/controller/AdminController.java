@@ -47,6 +47,7 @@ public class AdminController {
 		System.out.println(vo.toString());
 		adminService.update(vo);		
 		
+		model.addAttribute("vo", vo);
 		return "admin/main";
 	}
 
