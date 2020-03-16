@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.douzone.mysite.service.BoardService;
 import com.douzone.mysite.vo.BoardVO;
 import com.douzone.mysite.vo.UserVO;
+import com.douzone.security.Auth;
+import com.douzone.security.AuthUser;
 
 @Controller
 @RequestMapping("/board")
@@ -47,23 +49,25 @@ public class BoardController {
 	}
 
 	// Board 추가 form
+	@Auth
 	@RequestMapping(value = { "/add" }, method = RequestMethod.GET)
-	public String add(HttpSession session) {
-		UserVO authUser = (UserVO) session.getAttribute("authUser");
-		if (authUser == null) {
-			return "user/login";
-		} else {
-			return "board/write";
-		}
+	public String add(@AuthUser UserVO authUser) {
+//		UserVO authUser = (UserVO) session.getAttribute("authUser");
+//		if (authUser == null) {
+//			return "user/login";
+//		}
+		
+		return "board/write";
 	}
 	
 	// Board 추가 처리
+	@Auth
 	@RequestMapping(value = { "/add" }, method = RequestMethod.POST)
-	public String add(HttpSession session, BoardVO vo) {
-		UserVO authUser = (UserVO) session.getAttribute("authUser");
-		if (authUser == null) {
-			return "user/login";
-		}
+	public String add(@AuthUser UserVO authUser, BoardVO vo) {
+//		UserVO authUser = (UserVO) session.getAttribute("authUser");
+//		if (authUser == null) {
+//			return "user/login";
+//		}
 		vo.setMember_no(authUser.getNo());
 		if(service.addBoard(vo) == false) {
 			return "board/write";
@@ -74,13 +78,17 @@ public class BoardController {
 	
 	// Board 수정 form
 	// BoardVO의 no, title, contents 필수
+	@Auth
 	@RequestMapping(value = { "/modify/{no}" }, method = RequestMethod.GET)
-	public String modify(HttpSession session, @PathVariable("no") Long no, Model model) {
+	public String modify(@AuthUser UserVO authUser, @PathVariable("no") Long no, Model model) {
 		if(no == null) {
 			return "redirect:/";
 		}
-		UserVO authUser = (UserVO) session.getAttribute("authUser");
-		if (authUser == null ||  service.getPermissionForBoardManagement(no, authUser) == false) {
+//		UserVO authUser = (UserVO) session.getAttribute("authUser");
+//		if (authUser == null) {
+//			return "user/login";
+//		}
+		if (service.getPermissionForBoardManagement(no, authUser) == false) {
 			return "user/login";
 		}
 		
@@ -94,12 +102,13 @@ public class BoardController {
 	
 	// Board 수정 실행
 	// BoardVO의 no, title, contents가 request에 담겨짐
+	@Auth
 	@RequestMapping(value = { "/modify" }, method = RequestMethod.POST)
-	public String modify(HttpSession session, BoardVO vo) {
-		UserVO authUser = (UserVO) session.getAttribute("authUser");
-		if (authUser == null) {
-			return "user/login";
-		}
+	public String modify(@AuthUser UserVO authUser, BoardVO vo) {
+//		UserVO authUser = (UserVO) session.getAttribute("authUser");
+//		if (authUser == null) {
+//			return "user/login";
+//		}
 		
 		if(service.modifyBoard(vo, authUser) == false) {
 			return "redirect:/";
@@ -109,14 +118,14 @@ public class BoardController {
 	
 	// reply 페이지 form으로 연결
 	@RequestMapping(value = { "/reply/{no}" }, method = RequestMethod.GET)
-	public String reply(HttpSession session, @PathVariable("no") Long no, Model model) {
+	public String reply(@AuthUser UserVO authUser, @PathVariable("no") Long no, Model model) {
 		if(no == null) {
 			return "redirect:/";
 		}
-		UserVO authUser = (UserVO) session.getAttribute("authUser");
-		if (authUser == null) {
-			return "user/login";
-		}
+//		UserVO authUser = (UserVO) session.getAttribute("authUser");
+//		if (authUser == null) {
+//			return "user/login";
+//		}
 		
 		BoardVO targetVo = service.find(no);
 		model.addAttribute("targetVo", targetVo);
@@ -126,8 +135,8 @@ public class BoardController {
 	// reply 추가를 실행
 	// 기존의 vo(대상의 no, g_no, o_no, depth, title, contents) + member_no (authUser.no)
 	@RequestMapping(value = { "/reply" }, method = RequestMethod.POST)
-	public String reply(HttpSession session, BoardVO inputVo) {
-		UserVO authUser = (UserVO) session.getAttribute("authUser");
+	public String reply(@AuthUser UserVO authUser, BoardVO inputVo) {
+//		UserVO authUser = (UserVO) session.getAttribute("authUser");
 		
 		if(service.addReply(inputVo, authUser.getNo()) == false) {
 			return "redirect:/";
@@ -137,15 +146,16 @@ public class BoardController {
 	}
 	
 	// Board 삭제
+	@Auth
 	@RequestMapping(value = { "/delete/{no}" }, method = RequestMethod.GET)
-	public String remove(HttpSession session, @PathVariable("no") Long no) {
+	public String remove(@AuthUser UserVO authUser, @PathVariable("no") Long no) {
 		if(no == null) {
 			return "redirect:/";
 		}
-		UserVO authUser = (UserVO) session.getAttribute("authUser");
-		if (authUser == null ||  service.getPermissionForBoardManagement(no, authUser) == false) {
-			return "redirect:/";
-		}
+//		UserVO authUser = (UserVO) session.getAttribute("authUser");
+//		if (authUser == null ||  service.getPermissionForBoardManagement(no, authUser) == false) {
+//			return "redirect:/";
+//		}
 		
 		if(service.remove(no, authUser) == false) {
 			return "redirect:/";

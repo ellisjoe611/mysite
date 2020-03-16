@@ -1,16 +1,15 @@
 package com.douzone.mysite.controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.douzone.mysite.service.UserService;
 import com.douzone.mysite.vo.UserVO;
+import com.douzone.security.Auth;
+import com.douzone.security.AuthUser;
 
 @Controller
 @RequestMapping("/user")
@@ -24,23 +23,23 @@ public class UserController {
 		return "user/login";
 	}
 
-	@RequestMapping(value = { "/login" }, method = RequestMethod.POST)
-	public String login(HttpSession session, @ModelAttribute("vo") UserVO vo, Model model) {
-		UserVO authUser = userService.login(vo);
-		if (authUser == null) {
-			return "user/login";
-		} else {
-			session.setAttribute("authUser", authUser);
-			return "redirect:/";
-		}
-	}
+//	@RequestMapping(value = { "/login" }, method = RequestMethod.POST)
+//	public String login(HttpSession session, @ModelAttribute("vo") UserVO vo, Model model) {
+//		UserVO authUser = userService.login(vo);
+//		if (authUser == null) {
+//			return "user/login";
+//		} else {
+//			session.setAttribute("authUser", authUser);
+//			return "redirect:/";
+//		}
+//	}
 
-	@RequestMapping(value = { "/logout" })
-	public String logout(HttpSession session) {
-		session.removeAttribute("authUser");
-		session.invalidate();
-		return "redirect:/";
-	}
+//	@RequestMapping(value = { "/logout" })
+//	public String logout(HttpSession session) {
+//		session.removeAttribute("authUser");
+//		session.invalidate();
+//		return "redirect:/";
+//	}
 
 	@RequestMapping(value = { "/join" }, method = RequestMethod.GET)
 	public String join() {
@@ -61,24 +60,26 @@ public class UserController {
 		return "user/joinsuccess";
 	}
 
+	@Auth
 	@RequestMapping(value = { "/update" }, method = RequestMethod.GET)
-	public String update(HttpSession session, Model model) {
-		UserVO authUser = (UserVO) session.getAttribute("authUser");
-		if (session == null || authUser == null) {
-			return "redirect:/user/login";
-		}
+	public String update(@AuthUser UserVO authUser, Model model) {
+//		UserVO authUser = (UserVO) session.getAttribute("authUser");
+//		if (session == null || authUser == null) {
+//			return "redirect:/user/login";
+//		}
 
 		UserVO vo = userService.findUserInfo(authUser);
 		model.addAttribute("vo", vo);
 		return "user/update";
 	}
 
+	@Auth
 	@RequestMapping(value = { "/update" }, method = RequestMethod.POST)
-	public String udpate(HttpSession session, UserVO updatedVo, Model model) {
-		UserVO authUser = (UserVO) session.getAttribute("authUser");
-		if (session == null || authUser == null) {
-			return "redirect:/user/login";
-		}
+	public String udpate(@AuthUser UserVO authUser, UserVO updatedVo, Model model) {
+//		UserVO authUser = (UserVO) session.getAttribute("authUser");
+//		if (session == null || authUser == null) {
+//			return "redirect:/user/login";
+//		}
 		updatedVo.setNo(authUser.getNo());
 		
 		if (userService.update(updatedVo) == false) {

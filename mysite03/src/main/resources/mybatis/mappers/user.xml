@@ -6,7 +6,7 @@
 	<!-- 회원가입 ( [name, email, pw, gender] >>> [true/false] ) -->
 	<insert id="insert" parameterType="UserVO">
 		<![CDATA[
-			insert into user values(null, #{name}, #{email}, password(#{pw}), #{gender}, now())
+			insert into user values(null, #{name}, #{email}, password(#{pw}), #{gender}, now(), 'USER')
 		]]>
 		<selectKey keyProperty="no" resultType="long" order="AFTER">
 			select last_insert_id()
@@ -29,10 +29,10 @@
 		</choose>
 	</update>
 
-	<!-- 로그인용 ( [email, pw] >>> [no, name] ) -->
+	<!-- 로그인용 ( [email, pw] >>> [no, name, role] ) -->
 	<select id="findUser" parameterType="UserVO" resultType="UserVO">
 		<![CDATA[
-			select no, name from user where email = #{email} and pw = password(#{pw})
+			select no, name, role from user where email = #{email} and pw = password(#{pw})
 		]]>
 	</select>
 
