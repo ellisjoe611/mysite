@@ -23,7 +23,7 @@
 						<input id="welcome" name="welcome" type="text" value="${vo.welcome }">
 
 						<label class="block-label">프로필 이미지</label>
-						<img id="profile" src="${pageContext.request.contextPath }/assets/images/${vo.profile }">
+						<img id="profile" src="${pageContext.request.contextPath }/images/${vo.profile }">
 						<input type="file" name="upload-file">
 
 						<label class="block-label">사이트 설명</label>
