@@ -15,7 +15,7 @@ public class MainController {
 	private MainService service;
 	
 	@RequestMapping(value = { "", "/main" })
-	public String index(Model model) {		
+	public String index(Model model) {
 		model.addAttribute("vo", service.getWelcome());
 		return "main/index";
 	}
