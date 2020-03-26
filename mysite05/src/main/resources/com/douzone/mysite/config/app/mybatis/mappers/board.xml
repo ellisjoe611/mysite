@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+
+	<!-- 목록을 조회하기 -->
+	<!-- [startFrom, kwd??] >>> [contents를 제외한 나머지] -->
+	<select id="findall" parameterType="map" resultType="BoardVO">
+		<choose>
+			<when test='kwd == null or kwd == ""'>
+				<![CDATA[
+					select 
+						B.no, 
+						B.title, 
+						B.hit, 
+						B.reg_date, 
+						B.g_no, 
+						B.o_no, 
+						B.depth, 
+						B.member_no, 
+						U.name as member_name 
+					from board B 
+					join user U on (B.member_no = U.no) 
+					order by g_no desc, o_no asc 
+					limit #{startFrom}, 5
+				]]>
+			</when>
+			
+			
+			<otherwise>
+				<![CDATA[
+					select 
+						B.no, 
+						B.title, 
+						B.hit, 
+						B.reg_date, 
+						B.g_no, 
+						B.o_no, 
+						B.depth, 
+						B.member_no, 
+						U.name as member_name 
+					from board B 
+					join user U on (B.member_no = U.no) 
+					where title like '%${kwd}%' or contents like '%${kwd}%' 
+					order by g_no desc, o_no asc 
+					limit #{startFrom}, 5
+				]]>
+			</otherwise>
+		</choose>
+	</select>
+	<select id="getcounted" parameterType="map" resultType="long">
+		<choose>
+			<when test='kwd == null or kwd == ""'>
+				select count(*) from board
+			</when>
+			<otherwise>
+				select count(*) from board where title like '%${kwd}%' or contents like '%${kwd}%'
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<!-- 한 댓글의 내용을 조회하기 -->
+	<!-- no >>> [VO 내용 전체] -->
+	<select id="find" parameterType="long" resultType="BoardVO">
+		<![CDATA[
+			select 
+				B.no, 
+				B.title, 
+				B.contents, 
+				B.hit, 
+				B.reg_date, 
+				B.g_no, 
+				B.o_no, 
+				B.depth, 
+				B.member_no, 
+				U.name as member_name
+			from board B 
+			join user U on (B.member_no = U.no) 
+			where B.no = #{no}
+		]]>
+	</select>
+	
+	<!-- 맨 처음으로 board를 추가했을 때 -->
+	<!-- [title, contents, member_no] >>> true/false -->
+	<insert id="insert" parameterType="BoardVO">
+		<![CDATA[
+			insert into board(no, title, contents, hit, reg_date, g_no, o_no, depth, member_no) 
+			select 
+				null, 
+				#{title}, 
+				#{contents}, 
+				1, 
+				now(), 
+				ifnull(max(g_no)+1, 1), 
+				1, 
+				0, 
+				#{member_no} 
+			from board
+		]]>
+		<selectKey keyProperty="no" resultType="long" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<!-- 개시판 내용을 업데이트 -->
+	<!-- [title, contents, no] >>> true/false -->
+	<update id="modify" parameterType="BoardVO">
+		<![CDATA[
+			update board set title=#{title}, contents=#{contents} where no=#{no}
+		]]>
+	</update>
+	
+	<!-- 방문자수 증가 -->
+	<!-- no >>> true/false -->
+	<update id="addhit" parameterType="long">
+		<![CDATA[
+			update board set hit = hit + 1 where no = #{no}
+		]]>
+	</update>
+	
+	<!-- 개시물 삭제 -->
+	<!-- no >>> true/false -->
+	<delete id="delete" parameterType="long">
+		<![CDATA[
+			delete from board where no = #{no}
+		]]>
+	</delete>
+	
+	<!-- 해당 Board를 작성한 사람의 member_no 불러오기 -->
+	<!-- no >>> true/false -->
+	<select id="getBoardOwnerNo" parameterType="long" resultType="long">
+		<![CDATA[
+			select member_no from board where no=#{no}
+		]]>
+	</select>
+	
+	
+	<!--************************************************** 답글 추가 **************************************************-->
+	
+	<!-- 1. 같은 그룹(g_no)의 번호를 한칸씩 뒤로 미루기 -->
+	<!-- [대상의 g_no, 대상의 o_no] >>> [true/false] -->
+	<update id="updategroup" parameterType="BoardVO">
+		<![CDATA[
+			update board set o_no = o_no + 1 where g_no = #{g_no} and o_no > #{o_no}
+		]]>
+	</update>
+	
+	<!-- 2. 댓글을 삽입하기 -->
+	<!-- [title, contents, member_no, 대상의 no] >>> [true/false] -->
+	<insert id="addreply" parameterType="BoardVO">
+		<![CDATA[
+			insert into board(title, contents, hit, reg_date, g_no, o_no, depth, member_no) select #{title}, #{contents}, 1, now(), g_no, o_no + 1, depth + 1, #{member_no} from board where no = #{no}
+		]]>
+	</insert>
+	
+	<!--************************************************************************************************************-->
+	
+</mapper>
