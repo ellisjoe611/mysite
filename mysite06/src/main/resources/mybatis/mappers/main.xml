@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="main">
+
+	<!-- 내용을 조회하기 -->
+	<!-- >>> [VO 내용 전체] -->
+	<select id="find" resultType="MainVO">
+		<![CDATA[
+			select 
+				no, 
+				title, 
+				welcome, 
+				profile, 
+				description 
+			from site 
+			where no = 1
+		]]>
+	</select>
+	
+	<!-- 내용 전체를 수정하기 -->
+	<update id="update" parameterType="MainVO">
+		<![CDATA[
+			update site 
+			set 
+				title = #{title}, 
+				welcome = #{welcome}, 
+				profile = #{profile}, 
+				description = #{description} 
+			where no = 1
+		]]>
+	</update>
+</mapper>
